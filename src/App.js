@@ -15,7 +15,7 @@ class App extends Component {
 constructor() {
   super();
   this.state = {
-    hashRate : 800,
+    hashRate : 0,
     netWorkHash: 0,
     perSecond: 0,
     perMinute: 0,
@@ -33,6 +33,7 @@ constructor() {
  this.networkInformation = this.networkInformation.bind(this);
  this.searchBlockAndPushInArray = this.searchBlockAndPushInArray.bind(this);
  this.miningCalculation = this.miningCalculation.bind(this);
+ this.handlerHashRateChange = this.handlerHashRateChange.bind(this);
 
 
 }
@@ -69,31 +70,29 @@ networkInformation () {
     });
   });
   }
-  
+
+  handlerHashRateChange(e){
+    const hashRate = Number(e.target.value);
+    this.setState({hashRate});
+      this.miningCalculation();
+  }
+
   miningCalculation(){
     const that = this;
-    this.networkInformation().then(() => {
-      console.log(that.state);
+    console.log("entre");
+    this.networkInformation().then(() => {  
        const promise =  this.searchBlockAndPushInArray(that.state.Height-1);
-       console.log(promise);
        promise.then(() => {
        const secondPromise = this.searchBlockAndPushInArray(that.state.Height-2);
        secondPromise.then(() => {
-        const that = this;
-        console.log(this.state)
-        const seconds = that.state.blockArray[0].data.timestamp / that.state.blockArray[1].data.timestamp;
-        console.log(seconds)
-        
+        const that = this;  
+        const seconds = that.state.blockArray[0].data.timestamp / that.state.blockArray[1].data.timestamp;      
         const perSecond = (this.state.blockArray[0].data.txs[0].xmr_outputs/seconds)/100000000;
-        console.log(perSecond);
         const reward = seconds*perSecond;
-        const perBlock = perSecond *120;
-        console.log(perBlock)
+        const perBlock = perSecond *120; 
         const fPerHour = perBlock*30;
         const fPerDay =   fPerHour*24; 
-       console.log( ((that.state.hashRate / 1000)/that.state.netWorkHash))
-        const fPerSecond = ((that.state.hashRate / 1000)/that.state.netWorkHash) *(perBlock/120)
-        console.log(fPerSecond);
+        const fPerSecond = ((that.state.hashRate / 1000)/that.state.netWorkHash) *(perBlock/120)     
         const perMinute = fPerSecond * 60;
         const perHour = perMinute * 60;
         const perDay = perHour * 24;
@@ -106,24 +105,29 @@ networkInformation () {
         that.setState( {perMinute});
         that.setState( {perHour});
         that.setState( {perDay});
-        console.log(this.state)
+        console.log(that.state);
+  
        });   
     })
   });
 }
-  componentDidMount() {
-    this.miningCalculation();  
-    console.log(this.state) 
-  }
+  
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Mining Pool</h1>
         </header>
         <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
+        <input
+                  className="col-6"
+                  type="number"
+                  name="base"
+                  value={this.state.hashRate}
+                  onChange={this.handlerHashRateChange}
+                />
+       
         </p>
       </div>
     );
