@@ -27,7 +27,8 @@ constructor() {
     perHour: 0,
     perDay: 0,
     height: 0,
-    blockArray : []
+    blockArray : [],
+    hr : 0
   }
  this.networkInformation = this.networkInformation.bind(this);
  this.searchBlockAndPushInArray = this.searchBlockAndPushInArray.bind(this);
@@ -44,10 +45,12 @@ networkInformation () {
       .then(res => res.json())
       .then((transactionResponse) => {
     
-        const NetWorkHash = transactionResponse.data.hash_rate/1000;
+        const hr = transactionResponse.data.hash_rate;
+        const netWorkHash = hr/1000;
         const Height = transactionResponse.data.height;
         that.setState ( {Height});
-        that.setState ( {NetWorkHash});
+        that.setState ( {netWorkHash});
+        that.setState({hr});
         return resolve();
     });
   });
@@ -60,11 +63,8 @@ networkInformation () {
     fetch(blockUrl)
     .then(res => res.json())
     .then((blockResponse) => {
-       console.log("response :")
-      console.log(blockResponse);
-       this.setState({blockArray:[...this.state.blockArray, blockResponse]});
-       console.log("finish search");
-      console.log(this.state);
+      var joined = this.state.blockArray.concat(blockResponse);
+      this.setState({ blockArray: joined })
        return resolve();
     });
   });
@@ -77,17 +77,23 @@ networkInformation () {
        const promise =  this.searchBlockAndPushInArray(that.state.Height-1);
        console.log(promise);
        promise.then(() => {
-        this.searchBlockAndPushInArray(that.state.Height-2)
-       }).then(() => {
-        console.log(this.state.blockArray[0].data);
+       const secondPromise = this.searchBlockAndPushInArray(that.state.Height-2);
+       secondPromise.then(() => {
         const that = this;
-        const seconds = that.state.blockArray[0].data.timestamp / that.state.blockArray[0].data.timestamp;
+        console.log(this.state)
+        const seconds = that.state.blockArray[0].data.timestamp / that.state.blockArray[1].data.timestamp;
+        console.log(seconds)
+        
         const perSecond = (this.state.blockArray[0].data.txs[0].xmr_outputs/seconds)/100000000;
+        console.log(perSecond);
         const reward = seconds*perSecond;
         const perBlock = perSecond *120;
+        console.log(perBlock)
         const fPerHour = perBlock*30;
         const fPerDay =   fPerHour*24; 
+       console.log( ((that.state.hashRate / 1000)/that.state.netWorkHash))
         const fPerSecond = ((that.state.hashRate / 1000)/that.state.netWorkHash) *(perBlock/120)
+        console.log(fPerSecond);
         const perMinute = fPerSecond * 60;
         const perHour = perMinute * 60;
         const perDay = perHour * 24;
@@ -100,14 +106,14 @@ networkInformation () {
         that.setState( {perMinute});
         that.setState( {perHour});
         that.setState( {perDay});
-        console.log(that.state);
-      
-       
-      });     
+        console.log(this.state)
+       });   
     })
-  }
+  });
+}
   componentDidMount() {
-    this.miningCalculation();   
+    this.miningCalculation();  
+    console.log(this.state) 
   }
   render() {
     return (
