@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './sup-logo.png';
 import './App.css';
 const baseUrl = 'http://superior-coin.com:8081/api';
 
