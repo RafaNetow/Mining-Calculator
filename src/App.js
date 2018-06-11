@@ -110,18 +110,23 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Mining Pool</h1>
+          <h1 className="App-title">Superior Coin Mining Pool</h1>
         </header>
 
 
         <div className="container">
           <div className="row">
             <div className="col-sm-3 alert alert-success"><i class="fa fa-coins"></i> Total SUP mined </div>
-            <div className="col-sm-3 alert alert-warning" > Per Block: <label>{parseFloat(this.state.perBlock).toFixed(2)} </label> </div>
-            <div className="col-sm-3 alert alert-warning"> Per hour: <label>{parseFloat(this.state.fPerHour).toFixed(2)} </label>  </div>
-            <div className="col-sm-3 alert alert-warning"> Per day: {parseFloat(this.state.fPerDay).toFixed(2)}</div>
+            <div className="col-sm-3 alert alert-warning" > <i class="fa fa-clock"></i> Per Block: <label>{parseFloat(this.state.perBlock).toFixed(2)} </label> </div>
+            <div className="col-sm-3 alert alert-warning"> <i class="fa fa-clock"></i> Per hour: <label>{parseFloat(this.state.fPerHour).toFixed(2)} </label>  </div>
+            <div className="col-sm-3 alert alert-warning"> <i class="fa fa-clock"></i> Per day: {parseFloat(this.state.fPerDay).toFixed(2)}</div>
           </div>
-          <div className="row"> </div>
+          <div className="row">
+          <div class="alert alert-info col-sm-12">
+           <strong>Estimate mining rework</strong>
+          </div>
+          </div>
+
           <div className="row">
             <div className="col-sm-3 alert alert-success"> <i class="fas fa-align-justify"></i> Network Hash KH/s : {this.state.netWorkHash}   </div>
             <div className="col-sm-3 alert alert-warning"> <i class="fa fa-clock"></i> Per Second: {parseFloat(this.state.fPerSecond).toFixed(2)}</div>
