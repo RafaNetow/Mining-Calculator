@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import logo from './sup-logo.png';
+import NumberFormat from 'react-number-format';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 const baseUrl = 'http://superior-coin.com:8081/api';
+
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      hashRate: 0,
+      hashRate: 100,
       netWorkHash: 0,
       perSecond: 0,
       perMinute: 0,
@@ -104,7 +106,9 @@ class App extends Component {
       })
     });
   }
-
+  componentDidMount() {
+    this.miningCalculation();
+  }
   render() {
     return (
       <div className="App">
@@ -112,8 +116,6 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Superior Coin Mining Pool</h1>
         </header>
-
-
         <div className="container">
           <div className="row">
             <div className="col-sm-3 alert alert-success"><i class="fa fa-coins"></i> Total SUP mined </div>
@@ -126,28 +128,20 @@ class App extends Component {
            <strong>Estimate mining reward</strong>
           </div>
           </div>
-
           <div className="row">
             <div className="col-sm-3 alert alert-success"> <i class="fas fa-align-justify"></i> Network Hash KH/s : {this.state.netWorkHash}   </div>
-            <div className="col-sm-3 alert alert-warning"> <i class="fa fa-clock"></i> Per Second: {parseFloat(this.state.fPerSecond).toFixed(2)}</div>
-            <div className="col-sm-3 alert alert-warning"> <i class="fas fa-clock"></i> Per Minute: {parseFloat(this.state.perMinute).toFixed(2)}</div>
+            <div className="col-sm-3 alert alert-warning"> <i class="fa fa-clock"></i> Per Second: {parseFloat(this.state.fPerSecond).toFixed(5)}</div>
+            <div className="col-sm-3 alert alert-warning"> <i class="fas fa-clock"></i> Per Minute: {parseFloat(this.state.perMinute).toFixed(3)}</div>
             <div className="col-sm-3 alert alert-warning"> <i class="fas fa-clock"></i> Per Day:{parseFloat(this.state.perDay).toFixed(2)}</div>
           </div>
           <div className="row alert alert-success">
-            <div className="col-sm-3"><i class="fa fa-tachometer-alt"></i>Hash Rate H/s: </div>
-            <div className="col-sm-3"> </div>
-            <div className="col-sm-6">
-              <input
-                className="col-sm-6 form-control"
-                type="number"
-                name="base"
-                value={this.state.hashRate}
-                onChange={this.handlerHashRateChange}
-              /></div>
+            <div className="col-sm-6"><i class="fa fa-tachometer-alt"></i>Hash Rate H/s: </div>
+          
+            <div className="col-sm-3">
+            <NumberFormat  className ="form-control"value = {this.state.hashRate}  onChange= {this.handlerHashRateChange}/>
+              </div>
           </div>
         </div>
-
-
       </div>
     );
   }
