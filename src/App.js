@@ -123,7 +123,7 @@ class App extends Component {
           </div>
           <div className="row">
           <div class="alert alert-info col-sm-12">
-           <strong>Estimate mining rework</strong>
+           <strong>Estimate mining reward</strong>
           </div>
           </div>
 
